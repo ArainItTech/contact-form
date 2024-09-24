@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node index.js",  
     "build": "echo 'No build step needed'",
-    "postinstall": "npm install",
-    "deploy": "npm run build && git push heroku master"
+    "deploy": "npm run build"
   },
   "keywords": [],
   "author": "",
