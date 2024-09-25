@@ -1,3 +1,2 @@
 [build]
   publish = "public"  # Specify the folder that contains your frontend files
-  command = "npm run build"  # If you have a build command (optional)
