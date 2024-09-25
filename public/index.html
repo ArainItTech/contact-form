@@ -112,7 +112,8 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, mobile })
             }).then(data => {
-                alert('Email sent successfully');
+                console.log('Email sent successfully');
+                document.getElementById('contactForm').reset(); 
             }).catch(error => {
                 alert('Error: ' + error);
             });
