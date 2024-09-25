@@ -99,9 +99,6 @@
         </form>
     </div>
 
-    <!-- Include smtp.js from CDN -->
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
-
     <script>
         document.getElementById('contactForm').addEventListener('submit', function (event) {
             event.preventDefault();
@@ -110,20 +107,12 @@
             const name = document.getElementById('name').value;
             const mobile = document.getElementById('phone').value;
 
-            console.log(name, mobile);
-
-            fetch('/send-email', {
+            fetch('https://duuty-reg.netlify.app/.netlify/functions/send-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, mobile })
-            }).then(response => {
-                return response.json();
             }).then(data => {
-                if (data.success) {
-                    alert('Email sent successfully');
-                } else {
-                    alert('Error sending email');
-                }
+                alert('Email sent successfully');
             }).catch(error => {
                 alert('Error: ' + error);
             });
@@ -132,3 +121,4 @@
 </body>
 
 </html>
+
