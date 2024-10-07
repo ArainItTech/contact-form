@@ -26,6 +26,25 @@
             margin-bottom: 20px;
         }
 
+        .language-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .language-buttons button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .language-buttons .active {
+            background-color: #007bff;
+            color: white;
+        }
+
         .contact-form {
             max-width: 500px;
             margin: 0 auto;
@@ -80,17 +99,26 @@
 </head>
 
 <body>
-    <h1>Contact Us</h1>
+    <!-- Language Selection Buttons -->
+    <div class="language-buttons">
+        <button id="btn-en" class="active" onclick="setLanguage('en')">English</button>
+        <button id="btn-ap" onclick="setLanguage('ap')">తెలుగు</button>
+        <button id="btn-tn" onclick="setLanguage('tn')">தமிழ்</button>
+        <button id="btn-kl" onclick="setLanguage('kl')">മലയാളം</button>
+        <button id="btn-ka" onclick="setLanguage('ka')">ಕನ್ನಡ</button>
+    </div>
+
+    <h1 id="contactHeading">Contact Us</h1>
     <div class="contact-form">
         <form id="contactForm">
             <div class="form-group">
-                <label for="name">Name</label>
+                <label for="name" id="nameLabel">Name</label>
                 <input type="text" id="name" name="name" required>
                 <p id="nameError" class="error-message"></p>
             </div>
 
             <div class="form-group">
-                <label for="phone">Phone Number</label>
+                <label for="phone" id="phoneLabel">Phone Number</label>
                 <input type="tel" id="phone" name="phone" required>
                 <p id="phoneError" class="error-message"></p>
             </div>
@@ -100,6 +128,59 @@
     </div>
 
     <script>
+        // Set default language to English
+        let currentLanguage = 'en';
+
+        const labels = {
+            en: {
+                heading: "Contact Us",
+                name: "Name",
+                phone: "Phone Number"
+            },
+            kl: {  // Malayalam
+                heading: "ഞങ്ങളെ ബന്ധപ്പെടുക",
+                name: "പേര്",
+                phone: "ഫോൺ നമ്പർ"
+            },
+            ap: {  // Telugu
+                heading: "మమ్మల్ని సంప్రదించండి",
+                name: "పేరు",
+                phone: "ఫోన్ నంబర్"
+            },
+            ka: {  // Kannada
+                heading: "ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ",
+                name: "ಹೆಸರು",
+                phone: "ದೂರವಾಣಿ ಸಂಖ್ಯೆ"
+            },
+            tn: {  // Tamil
+                heading: "எங்களை தொடர்பு கொள்ளுங்கள்",
+                name: "பெயர்",
+                phone: "தொலைபேசி எண்"
+            },
+            hi: {  // Hindi
+                heading: "संपर्क करें",
+                name: "नाम",
+                phone: "फ़ोन नंबर"
+            }
+        };
+
+
+        // Function to change the language
+        function setLanguage(language) {
+            currentLanguage = language;
+            document.getElementById('contactHeading').textContent = labels[language].heading;
+            document.getElementById('nameLabel').textContent = labels[language].name;
+            document.getElementById('phoneLabel').textContent = labels[language].phone;
+
+            // Update button styles
+            document.getElementById('btn-en').classList.remove('active');
+            document.getElementById('btn-ap').classList.remove('active');
+            document.getElementById('btn-ka').classList.remove('active');
+            document.getElementById('btn-kl').classList.remove('active');
+            document.getElementById('btn-tn').classList.remove('active');
+            document.getElementById(`btn-${language}`).classList.add('active');
+        }
+
         document.getElementById('contactForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
@@ -113,13 +194,15 @@
                 body: JSON.stringify({ name, mobile })
             }).then(data => {
                 console.log('Email sent successfully');
-                document.getElementById('contactForm').reset(); 
+                document.getElementById('contactForm').reset();
             }).catch(error => {
                 alert('Error: ' + error);
             });
         });
+
+        // Set the default language to English on page load
+        setLanguage('en');
     </script>
 </body>
 
 </html>
-
