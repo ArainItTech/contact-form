@@ -45,7 +45,7 @@ if (event.httpMethod !== 'POST') {
   // Define email options
   const mailOptions = {
     from: "dpchowdaryd@gmail.com", // Your email
-    to: "prasanna.dommalapati@gmail.com,dineshbunny1888@gmail.com", // Recipient email
+    to: "ravi.sodinger@gmail.com", // Recipient email
     subject: `Duuty RegistrationSubmission from ${name}`,
     html: `
             <html>
