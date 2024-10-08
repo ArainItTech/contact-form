@@ -102,8 +102,8 @@
             margin-top: 5px;
         }
 
-      /* Responsive adjustments */
-      @media (max-width: 600px) {
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
             .language-buttons {
                 margin-bottom: 15px;
             }
@@ -113,7 +113,8 @@
                 font-size: 14px;
                 flex: 1 1 40%;
                 max-width: 100px;
-                margin: 10px 5px; /* Space between rows and columns for smaller screens */
+                margin: 10px 5px;
+                /* Space between rows and columns for smaller screens */
             }
 
             .submit-btn {
@@ -122,12 +123,12 @@
         }
     </style>
 </head>
-    </style>
+</style>
 </head>
 
 <body>
-     <!-- Logo -->
-     <img src="./logo.png" alt="DUUTY Logo" class="logo">
+    <!-- Logo -->
+    <img src="./logo.png" alt="DUUTY Logo" class="logo">
 
     <!-- Language Selection Buttons -->
     <div class="language-buttons">
@@ -213,6 +214,27 @@
             document.getElementById(`btn-${language}`).classList.add('active');
         }
 
+        function saveToSheet(name, phone) {
+            const url = "https://script.google.com/macros/s/AKfycbwbrbxRSJSGsuvkd74ZjZ2P8FsNLYx8fRDJC65WSqyPCEvKCJ9JI7BCDyMjQB-hybulCQ/exec";
+
+            // Submit form data to Google Sheets
+            fetch(url, {
+                method: 'POST',
+                mode: 'no-cors', // Disable CORS
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, phone })
+            }).then(() => {
+                // Can't check response in no-cors mode
+                alert('Form submitted successfully!');
+                document.getElementById('contactForm').reset();
+            })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
         document.getElementById('contactForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
@@ -220,16 +242,18 @@
             const name = document.getElementById('name').value;
             const mobile = document.getElementById('phone').value;
 
-            fetch('https://duuty-reg.netlify.app/.netlify/functions/send-email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, mobile })
-            }).then(data => {
-                console.log('Email sent successfully');
-                document.getElementById('contactForm').reset();
-            }).catch(error => {
-                alert('Error: ' + error);
-            });
+            saveToSheet(name, mobile);
+
+            // fetch('https://duuty-reg.netlify.app/.netlify/functions/send-email', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ name, mobile })
+            // }).then(data => {
+            //     console.log('Email sent successfully');
+            //     document.getElementById('contactForm').reset();
+            // }).catch(error => {
+            //     alert('Error: ' + error);
+            // });
         });
 
         // Set the default language to English on page load
