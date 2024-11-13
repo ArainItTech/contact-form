@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="https://smtpjs.com/v3/smtp.js"></script> -->
+    <title>DUUTY</title>
+    <style>
+        /* Basic reset for margins and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 150px;
+        }
+
+        .language-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .language-buttons button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .language-buttons .active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group input:focus {
+            border-color: #66afe9;
+            outline: none;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+
+        .error-message {
+            display: none;
+            color: red;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        /* Style for the select dropdown */
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            appearance: none;
+            /* Hides default dropdown arrow */
+            background-color: #fff;
+        }
+
+        .form-group select:focus {
+            border-color: #66afe9;
+            outline: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .language-buttons {
+                margin-bottom: 15px;
+            }
+
+            .language-buttons button {
+                padding: 10px 14px;
+                font-size: 14px;
+                flex: 1 1 40%;
+                max-width: 100px;
+                margin: 10px 5px;
+                /* Space between rows and columns for smaller screens */
+            }
+
+            .submit-btn {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+</style>
+</head>
+
+<body>
+    <!-- Logo -->
+    <img src="./logo.png" alt="DUUTY Logo" class="logo">
+
+    <!-- Language Selection Buttons -->
+    <div class="language-buttons">
+        <button id="btn-en" class="active" onclick="setLanguage('en')">English</button>
+        <button id="btn-ap" onclick="setLanguage('ap')">తెలుగు</button>
+        <button id="btn-tn" onclick="setLanguage('tn')">தமிழ்</button>
+        <button id="btn-kl" onclick="setLanguage('kl')">മലയാളം</button>
+        <button id="btn-ka" onclick="setLanguage('ka')">ಕನ್ನಡ</button>
+        <button id="btn-hi" onclick="setLanguage('hi')">हिंदी</button>
+    </div>
+
+    <h1 id="contactHeading">Register to hire Top Kitchen Talents</h1>
+    <div class="contact-form">
+        <form id="contactForm" novalidate="novalidate">
+            <div class="form-group">
+                <label for="name" id="nameLabel">Name</label>
+                <input type="text" id="name" name="name">
+                <p id="nameError" class="error-message"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="phone" id="phoneLabel">Phone Number</label>
+                <input type="tel" id="phone" name="phone">
+                <p id="phoneError" class="error-message"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="position" id="positionLabel">Hire For</label>
+                <select id="position" name="position" class="form-control">
+                    <option value="" selected disabled>Please select role</option>
+                </select>
+                <p id="positionError" class="error-message"></p>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Set default language to English
+        let currentLanguage = 'en';
+
+        const positionOptions = {
+            DosaParottaMaster: "Dosa & Parotta Master",
+            BiryaniMaster: "Biryani Master",
+            GrillTandooriMaster: "Grill & Tandoori Master",
+            SouthIndianThaliMaster: "South Indian Thali Master",
+            NorthIndianThaliMaster: "North Indian Thali Master",
+            TeaMaster: "Tea Master",
+            ChaatMaster: "Chaat Master",
+            ChineseMaster: "Chinese Master",
+            ChettinadMaster: "Chettinad Master",
+            ContinentalMaster: "Continental Master",
+            JuiceMaster: "Juice Master",
+            TiffinMaster: "Tiffin Master",
+            VegetarianMaster: "Vegetarian Master",
+            SweetMaster: "Sweet Master",
+            KaaramMaster: "Kaaram Master",
+            CakeMaster: "Cake Master",
+            Helpers: "Helpers",
+            Suppliers: "Suppliers",
+            Cleaners: "Cleaners"
+        };
+
+        const labels = {
+            en: {
+                heading: "Register to hire Top Kitchen Talents",
+                name: "Name",
+                phone: "Phone Number",
+                position: "Hiring For",
+                defaultOption: "Please select role",
+                positions: positionOptions
+            },
+            kl: {  // Malayalam
+                heading: "മികച്ച അടുക്കള പ്രതിഭകളെ നിയമിക്കുന്നതിന് രജിസ്റ്റർ ചെയ്യുക",
+                name: "പേര്",
+                phone: "ഫോൺ നമ്പർ",
+                position: "നിയമനം",
+                defaultOption: "ദയവായി റോൾ തിരഞ്ഞെടുക്കുക",
+                positions: positionOptions
+            },
+            ap: {  // Telugu
+                heading: "టాప్ కిచెన్ టాలెంట్లను నియమించుకోవడానికి నమోదు చేసుకోండి",
+                name: "పేరు",
+                phone: "ఫోన్ నంబర్",
+                position: "నియామకం కోసం",
+                defaultOption: "దయచేసి పాత్రను ఎంచుకోండి",
+                positions: positionOptions
+            },
+            ka: {  // Kannada
+                heading: "ಟಾಪ್ ಕಿಚನ್ ಟ್ಯಾಲೆಂಟ್‌ಗಳನ್ನು ನೇಮಿಸಿಕೊಳ್ಳಲು ನೋಂದಾಯಿಸಿ",
+                name: "ಹೆಸರು",
+                phone: "ದೂರವಾಣಿ ಸಂಖ್ಯೆ",
+                position: "ನೇಮಕ",
+                defaultOption: "ದಯವಿಟ್ಟು ಪಾತ್ರವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+                positions: positionOptions
+            },
+            tn: {  // Tamil
+                heading: "சிறந்த சமையலறை திறமையாளர்களை பணியமர்த்த பதிவு செய்யவும்",
+                name: "பெயர்",
+                phone: "தொலைபேசி எண்",
+                position: "பணியமர்த்தல்",
+                defaultOption: "பாத்திரத்தைத் தேர்ந்தெடுக்கவும்",
+                positions: positionOptions
+            },
+            hi: {  // Hindi
+                heading: "शीर्ष रसोई प्रतिभाओं को नियुक्त करने के लिए पंजीकरण करें",
+                name: "नाम",
+                phone: "फ़ोन नंबर",
+                position: "किराये पर लेना के लिए",
+                defaultOption: "कृपया भूमिका चुनें",
+                positions: positionOptions
+            }
+        };
+
+        function displayRoleOptions(language) {
+            // Update position dropdown options with default option
+            const positionDropdown = document.getElementById('position');
+            positionDropdown.innerHTML = ''; // Clear current options
+
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = labels[language].defaultOption;
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            positionDropdown.appendChild(defaultOption);
+
+            // Add translated position options
+            const positionOptions = labels[language].positions;
+            for (const [value, label] of Object.entries(positionOptions)) {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = label;
+                positionDropdown.appendChild(option);
+            }
+        }
+
+        // Function to change the language
+        function setLanguage(language) {
+            currentLanguage = language;
+            document.getElementById('contactHeading').textContent = labels[language].heading;
+            document.getElementById('nameLabel').textContent = labels[language].name;
+            document.getElementById('phoneLabel').textContent = labels[language].phone;
+            document.getElementById('positionLabel').textContent = labels[language].position;
+
+            displayRoleOptions(currentLanguage);
+
+            // Update button styles
+            document.getElementById('btn-en').classList.remove('active');
+            document.getElementById('btn-ap').classList.remove('active');
+            document.getElementById('btn-ka').classList.remove('active');
+            document.getElementById('btn-kl').classList.remove('active');
+            document.getElementById('btn-tn').classList.remove('active');
+            document.getElementById('btn-hi').classList.remove('active');
+            document.getElementById(`btn-${language}`).classList.add('active');
+        }
+
+        function saveToSheet(name, phone, position) {
+            const url = "https://script.google.com/macros/s/AKfycbwi2MSxaLPTLexz6wQ8NtVoPgqf9hbNCp-aT0gMCBC0x6keKeK09KHy_GD9a7mZBd9_wA/exec";
+
+            // Submit form data to Google Sheets
+            fetch(url, {
+                method: 'POST',
+                mode: 'no-cors', // Disable CORS
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, phone, position })
+            }).then(() => {
+                // Can't check response in no-cors mode
+                alert('Form submitted successfully!');
+                document.getElementById('contactForm').reset();
+            })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+        document.getElementById('contactForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const mobile = document.getElementById('phone').value;
+            const position = document.getElementById('position').value;
+
+            // Clear previous error messages and hide them
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('nameError').style.display = 'none';
+            document.getElementById('phoneError').textContent = '';
+            document.getElementById('phoneError').style.display = 'none';
+            document.getElementById('positionError').textContent = '';
+            document.getElementById('positionError').style.display = 'none';
+
+            if (validateForm(name, mobile, position)) {
+                saveToSheet(name, mobile, position);
+            }
+        });
+
+        function validateForm(name, mobile, position) {
+            // Validation flags
+            let isValid = true;
+
+            // Check if name is empty
+            if (name === '') {
+                document.getElementById('nameError').textContent = 'Please enter your name.';
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Check if mobile is empty or invalid
+            if (mobile === '') {
+                document.getElementById('phoneError').textContent = 'Please enter your phone number.';
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Check if position is selected
+            if (position === '') {
+                document.getElementById('positionError').textContent = 'Please select a position.';
+                document.getElementById('positionError').style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Set the default language to English on page load
+        setLanguage('en');
+        displayRoleOptions('en');
+
+    </script>
+</body>
+
+</html>

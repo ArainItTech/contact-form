@@ -98,8 +98,27 @@
         }
 
         .error-message {
+            display: none;
             color: red;
             margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        /* Style for the select dropdown */
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            appearance: none;
+            /* Hides default dropdown arrow */
+            background-color: #fff;
+        }
+
+        .form-group select:focus {
+            border-color: #66afe9;
+            outline: none;
         }
 
         /* Responsive adjustments */
@@ -145,14 +164,22 @@
         <form id="contactForm">
             <div class="form-group">
                 <label for="name" id="nameLabel">Name</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name">
                 <p id="nameError" class="error-message"></p>
             </div>
 
             <div class="form-group">
                 <label for="phone" id="phoneLabel">Phone Number</label>
-                <input type="tel" id="phone" name="phone" required>
+                <input type="tel" id="phone" name="phone">
                 <p id="phoneError" class="error-message"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="position" id="positionLabel">Hire For</label>
+                <select id="position" name="position" class="form-control">
+                    <option value="" selected disabled>Please select role</option>
+                </select>
+                <p id="positionError" class="error-message"></p>
             </div>
 
             <button type="submit" class="submit-btn">Submit</button>
@@ -163,39 +190,101 @@
         // Set default language to English
         let currentLanguage = 'en';
 
+        const positionOptions = {
+            DosaParottaMaster: "Dosa & Parotta Master",
+            BiryaniMaster: "Biryani Master",
+            GrillTandooriMaster: "Grill & Tandoori Master",
+            SouthIndianThaliMaster: "South Indian Thali Master",
+            NorthIndianThaliMaster: "North Indian Thali Master",
+            TeaMaster: "Tea Master",
+            ChaatMaster: "Chaat Master",
+            ChineseMaster: "Chinese Master",
+            ChettinadMaster: "Chettinad Master",
+            ContinentalMaster: "Continental Master",
+            JuiceMaster: "Juice Master",
+            TiffinMaster: "Tiffin Master",
+            VegetarianMaster: "Vegetarian Master",
+            SweetMaster: "Sweet Master",
+            KaaramMaster: "Kaaram Master",
+            CakeMaster: "Cake Master",
+            Helpers: "Helpers",
+            Suppliers: "Suppliers",
+            Cleaners: "Cleaners"
+        };
+
         const labels = {
             en: {
                 heading: "Register for Jobs",
                 name: "Name",
-                phone: "Phone Number"
+                phone: "Phone Number",
+                position: "Hiring For",
+                defaultOption: "Please select role",
+                positions: positionOptions
             },
             kl: {  // Malayalam
                 heading: "ജോലികൾക്കായി രജിസ്റ്റർ ചെയ്യുക",
                 name: "പേര്",
-                phone: "ഫോൺ നമ്പർ"
+                phone: "ഫോൺ നമ്പർ",
+                position: "നിയമനം",
+                defaultOption: "ദയവായി റോൾ തിരഞ്ഞെടുക്കുക",
+                positions: positionOptions
             },
             ap: {  // Telugu
                 heading: "ఉద్యోగాల కోసం నమోదు చేసుకోండి",
                 name: "పేరు",
-                phone: "ఫోన్ నంబర్"
+                phone: "ఫోన్ నంబర్",
+                position: "నియామకం కోసం",
+                defaultOption: "దయచేసి పాత్రను ఎంచుకోండి",
+                positions: positionOptions
             },
             ka: {  // Kannada
                 heading: "ಉದ್ಯೋಗಗಳಿಗಾಗಿ ನೋಂದಾಯಿಸಿ",
                 name: "ಹೆಸರು",
-                phone: "ದೂರವಾಣಿ ಸಂಖ್ಯೆ"
+                phone: "ದೂರವಾಣಿ ಸಂಖ್ಯೆ",
+                position: "ನೇಮಕ",
+                defaultOption: "ದಯವಿಟ್ಟು ಪಾತ್ರವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+                positions: positionOptions
             },
             tn: {  // Tamil
                 heading: "வேலைகளுக்கான பதிவு",
                 name: "பெயர்",
-                phone: "தொலைபேசி எண்"
+                phone: "தொலைபேசி எண்",
+                position: "பணியமர்த்தல்",
+                defaultOption: "பாத்திரத்தைத் தேர்ந்தெடுக்கவும்",
+                positions: positionOptions
             },
             hi: {  // Hindi
                 heading: "नौकरियों के लिए पंजीकरण करें",
                 name: "नाम",
-                phone: "फ़ोन नंबर"
+                phone: "फ़ोन नंबर",
+                position: "किराये पर लेना के लिए",
+                defaultOption: "कृपया भूमिका चुनें",
+                positions: positionOptions
             }
         };
 
+        function displayRoleOptions(language) {
+            // Update position dropdown options with default option
+            const positionDropdown = document.getElementById('position');
+            positionDropdown.innerHTML = ''; // Clear current options
+
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = labels[language].defaultOption;
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            positionDropdown.appendChild(defaultOption);
+
+            // Add translated position options
+            const positionOptions = labels[language].positions;
+            for (const [value, label] of Object.entries(positionOptions)) {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = label;
+                positionDropdown.appendChild(option);
+            }
+        }
 
         // Function to change the language
         function setLanguage(language) {
@@ -203,6 +292,8 @@
             document.getElementById('contactHeading').textContent = labels[language].heading;
             document.getElementById('nameLabel').textContent = labels[language].name;
             document.getElementById('phoneLabel').textContent = labels[language].phone;
+
+            displayRoleOptions(currentLanguage);
 
             // Update button styles
             document.getElementById('btn-en').classList.remove('active');
@@ -214,8 +305,8 @@
             document.getElementById(`btn-${language}`).classList.add('active');
         }
 
-        function saveToSheet(name, phone) {
-            const url = "https://script.google.com/macros/s/AKfycbwbrbxRSJSGsuvkd74ZjZ2P8FsNLYx8fRDJC65WSqyPCEvKCJ9JI7BCDyMjQB-hybulCQ/exec";
+        function saveToSheet(name, phone, position) {
+            const url = "https://script.google.com/macros/s/AKfycbzg-NdRJNysKpKLB-QYlX2YcHzvwvhIgSQ1QvM03SXAQc48XlMWCkHTg_1QHb-t51hnag/exec";
 
             // Submit form data to Google Sheets
             fetch(url, {
@@ -224,7 +315,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name, phone })
+                body: JSON.stringify({ name, phone, position })
             }).then(() => {
                 // Can't check response in no-cors mode
                 alert('Form submitted successfully!');
@@ -235,14 +326,53 @@
                 });
         }
 
+        function validateForm(name, mobile, position) {
+            // Validation flags
+            let isValid = true;
+
+            // Check if name is empty
+            if (name === '') {
+                document.getElementById('nameError').textContent = 'Please enter your name.';
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Check if mobile is empty or invalid
+            if (mobile === '') {
+                document.getElementById('phoneError').textContent = 'Please enter your phone number.';
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Check if position is selected
+            if (position === '') {
+                document.getElementById('positionError').textContent = 'Please select a position.';
+                document.getElementById('positionError').style.display = 'block';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
         document.getElementById('contactForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
             // Get form values
             const name = document.getElementById('name').value;
             const mobile = document.getElementById('phone').value;
+            const position = document.getElementById('position').value;
 
-            saveToSheet(name, mobile);
+            // Clear previous error messages and hide them
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('nameError').style.display = 'none';
+            document.getElementById('phoneError').textContent = '';
+            document.getElementById('phoneError').style.display = 'none';
+            document.getElementById('positionError').textContent = '';
+            document.getElementById('positionError').style.display = 'none';
+
+            if (validateForm(name, mobile, position)) {
+                saveToSheet(name, mobile, position);
+            }
 
             // fetch('https://duuty-reg.netlify.app/.netlify/functions/send-email', {
             //     method: 'POST',
@@ -258,6 +388,7 @@
 
         // Set the default language to English on page load
         setLanguage('en');
+        displayRoleOptions('en');
     </script>
 </body>
 
